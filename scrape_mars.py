@@ -1,49 +1,36 @@
+
+#pip3 install flask
 from flask import Flask, render_template
 
-# Import our pymongo library, which lets us connect our Flask app to our Mongo database.
+# Import our pymon#go library, which lets us connect our Flask app to our Mongo database.
 import pymongo
 
-# Create an instance of our Flask app.
-app = Flask(__name__)
+from splinter import Browser  
+from bs4 import BeautifulSoup as bs 
+import requests  
+from webdriver_manager.chrome import ChromeDriverManager
+import pandas as pd 
+import time 
 
-# Create connection variable
-conn = 'mongodb://localhost:27017'
+mars = {}
 
-# Pass connection to the pymongo instance.
-client = pymongo.MongoClient(conn)
+def scrape(): 
+    #path = r'C:\Users\vhowell\Downloads\chromedriver_win32 (2)\\chromedriver.exe'
+    #path = r'/Users/vanessahowell/Desktop/chromedriver.exe' 
+    path = r'/usr/local/bin/chromedriver.exe'
 
-# Connect to a database. Will create one if not already available.
-db = client.team_db
+    browser = Browser('chrome', executable_path = path, headless = False)
+    url = "https://mars.nasa.gov/news/"
+    browser.visit(url) 
+    html = browser.html
+    soup = bs(html, 'html.parser')
+    news_title = soup.find('div', class_='bottom_gradient').text
+    news_p = soup.find('div', class_='article_teaser_body').text
 
-# Drops collection if available to remove duplicates
-db.team.drop()
-
-# Creates a collection in the database and inserts two documents
-db.team.insert_many(
-    [
-        {
-            'player': 'Jessica',
-            'position': 'Point Guard'
-        },
-        {
-            'player': 'Mark',
-            'position': 'Center'
-        }
-    ]
-)
+    mars['news title'] = news_title
+    mars['news paragraph'] = news_p 
+    scrape_mars = mars 
+    return mars  
 
 
-# Set route
-@app.route('/')
-def index():
-    # Store the entire team collection in a list
-    teams = list(db.team.find())
-    print(teams)
-
-    # Return the template with the teams list passed in
-    return render_template('index.html', teams=teams)
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
 
