@@ -9,17 +9,60 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 
+<!-- Title + Button   -->
 <body>
-  <div class="container text-center">
-    <h1 class="jumbotron">Mission to Mars</h1>
-    <div>
-      <ul style="list-style: none;">
-        {% for team in teams %}
-          <li>{{ team.player }}: {{ team.position }}</li>
-        {% endfor %}
-      </ul>
+  <div class="container-fluid"> 
+    <div class = "jumbotron text-center">
+    <h1> Mission to Mars </h1> 
+      <p></p>
+      <p><a class= 'btn btn-primary btn-lg' href='/scrape' role='button'> 
+        Scrape New Data
+      </a></p>
     </div>
-  </div>
+   
+    <!-- Latest News   -->
+      <h1> Latest Mars News</h1>
+      <h3>{{mars.news_title}}</h3>
+      <p>{{mars.news_p}}</p>  
+      <p>{{mars.tables}}</p>
+      <h4></h4>
+
+      
+      <!-- Mars Image  -->
+      <h3>Mars Image</h3>
+      <div style="max-width: 450px; max-height: 150px; font-size: 15px; margin-bottom: 65px;"> 
+        <p>{{mars.featured_image_url}}</p>
+        <img src="{{mars.featured_image_url}}" alt ='image'>
+      </div>
+      
+      
+      <!-- Table -->
+  
+      <h3>Mars Facts</h3>
+      <div style="max-width: 450px; max-height: 150px; font-size: 15px; margin-bottom: 65px;">
+          {{mars.mars_facts | safe}}
+      </div>
+
+<br> 
+      <!-- Hemisphere -->
+      <h3>Mars Hemispheres</h3>
+      
+    </br>
+        {%for hemisphere in mars.hemisphere_image_urls%} 
+        {{hemisphere.title}}</br>  
+        <img src="{{hemisphere.hemisphere_image_urls}}" alt ='image'>
+        {%endfor%} 
+   
+  </div> 
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
